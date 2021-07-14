@@ -1,11 +1,43 @@
-# Start your own "Can of Books" App
+# Can of Books
 
-This repository has starter code to begin work on creating your own online bookshelf.
+**Author**: Rafeef Alhayek & Sondos Aljawhary
+**Version**: 1.0.0 
 
-## What can books do?
+## Overview
+Building a CRUD APP that allows the user to login, logout, and shows the user's favorite books.
 
-Books are life-changing. They have the power to enlighten, educate, entertain, heal, and help us grow. Build out this code base to create an web app to track what books have impacted you, and what's recommended to read next.
+## Getting Started
+<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
-## Use this template
+## Architecture
+React.js / React Bootstrap / Auth0
 
-Clone this repo to your own account with the green "Use this template" button. Then, add any collaborators. Now you are ready to start adding features! Deploy your site to let the world know which books have had the greatest impact on you, and what's recommended. Enjoy!
+## Change Log
+<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
+01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
+
+## Credit and Collaborations
+Sondos Aljawhary is my teammate.
+
+............................................................................................
+
+Name of feature: lab 11
+
+Estimate of time needed to complete: 5 hours
+
+Start time: 2 pm
+
+Finish time: 5 pm 
+
+Actual time needed to complete: 3 hours
+..............................................................................................
+
+Name of feature: lab 12
+
+Estimate of time needed to complete: one day
+
+Start time: 5 pm
+
+Finish time: 9 pm 
+
+Actual time needed to complete: 4 hours
