@@ -6,24 +6,27 @@ const cors = require('cors');
 
 const mongoose = require('mongoose');
 
-const server = express();
+const app = express();
 const PORT = process.env.PORT;
-server.use(cors());
+app.use(cors());
 
-server.get('/', homePageHandler);
+app.get('/', homePageHandler);
 function homePageHandler(request, response) {
   response.send('Hello in my route home')
 }
 
-server.get('/test', (request, response) => {
+app.get('/test', (request, response) => {
   response.status(200).send('my server is working')})
+
+app.use(express.json())
 
 mongoose.connect('mongodb://localhost:27017/books', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const bookSchema = new mongoose.Schema({
   name : String,
   description : String,
-  status : String
+  status : String,
+  img : String
 });
 
 const userSchema = new mongoose.Schema({
@@ -34,17 +37,17 @@ const userSchema = new mongoose.Schema({
 const bookModel = mongoose.model('books', bookSchema);
 const userModel = mongoose.model('user', userSchema);
 
-function seedBookCollection(){
-  const books = new bookModel({
-    name : 'The Growth Mindset',
+// function seedBookCollection(){
+//   const books = new bookModel({
+//     name : 'The Growth Mindset',
 
-    description : 'Dweck coined the terms fixed mindset and growth mindset to describe the underlying beliefs people have about learning and intelligence. When students believe they can get smarter, they understand that effort makes them stronger. Therefore they put in extra time and effort, and that leads to higher achievement.',
+//     description : 'Dweck coined the terms fixed mindset and growth mindset to describe the underlying beliefs people have about learning and intelligence. When students believe they can get smarter, they understand that effort makes them stronger. Therefore they put in extra time and effort, and that leads to higher achievement.',
     
-    status : 'FAVORITE FIVE'
-  })
-  books.save();
-}
-// seedBookCollection();
+//     status : 'FAVORITE FIVE'
+//   })
+//   books.save();
+// }
+// // seedBookCollection();
 
 function seedUserCollection (){
   const user = new userModel({
@@ -56,13 +59,18 @@ function seedUserCollection (){
 
     description : 'Dweck coined the terms fixed mindset and growth mindset to describe the underlying beliefs people have about learning and intelligence. When students believe they can get smarter, they understand that effort makes them stronger. Therefore they put in extra time and effort, and that leads to higher achievement.',
     
-    status : 'FAVORITE FIVE'},
+    status : 'FAVORITE FIVE',
+
+    img: 'https://m.media-amazon.com/images/I/61bDwfLudLL._AC_UL640_QL65_.jpg'},
+
     {
       name: 'The Momnt of Lift',
       
       description: 'Melinda Gates shares her how her exposure to the poor around the world has established the objectives of her foundation.',
       
-      status: 'RECOMMENDED TO ME'
+      status: 'RECOMMENDED TO ME',
+
+      img: 'https://m.media-amazon.com/images/I/71LESEKiazL._AC_UY436_QL65_.jpg'
       
     }
     ]
@@ -86,6 +94,47 @@ function getFavBook(req,res){
     }
 
   })
+}
+
+app.post('/addbook', addBookHandler);
+function addBookHandler(req,res) {
+  let {userEmail, bookName, bookDescription, bookStatus, bookImg} = req.body;
+
+  userModel.find({email : userEmail}, function(error, userData){
+    if (error){
+      res.send('user not found')
+    }else {
+      userData.push({
+        name : bookName,
+        description : bookDescription,
+        status : bookStatus,
+        img : bookImg
+      })
+      userData[0].save();
+      res.send(userData[0].books);
+    }
+  })
+}
+
+app.delete('/deletebook/:id', deleteBookHandler);
+function deleteBookHandler(req,res) {
+  const id = Number(req.params.id);
+
+  let userEmail = req.query.userEmail;
+
+  userModel.find({email : userEmail}, function(error,userData){
+    if(error){
+      res.status(500).send('NOT FOUND')
+    }else {
+      let newArray = userData[0].books.filter((item,idx)=> {
+        if(idx !== id) return {item}
+      })
+      userData[0].books = newArray
+      userData[0].save();
+      res.send(userData[0].books)
+    }
+  })
+
 }
 
 
