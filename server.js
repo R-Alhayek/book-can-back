@@ -137,6 +137,26 @@ function deleteBookHandler(req,res) {
 
 }
 
+app.put('/updatebook/:bookID', updateBookHandler);
+function updateBookHandler(req,res){
+  let {userEmail, bookName, bookDescription, bookStatus, bookImg} = req.body;
+  let index = Number(req.params.bookID);
+
+  userModel.findOne({email: userEmail}, (error,userData) =>{
+    if(error) res.send('error finding the data')
+    else {
+      userData.books.splice(index,1,{
+        name : bookName,
+        description : bookDescription,
+        status : bookStatus,
+        img : bookImg
+      })
+      userData.save();
+      res.send(userData.books)
+    }
+  })
+}
+
 
 
 
